@@ -1,0 +1,19 @@
+#name of the action, in this case it is "hello world"
+name: hello world
+
+#triggers are always under "on"
+# in this case, whenever we push or pull from main branch our workflow will be activated
+on:
+  push:
+    branches:
+      - main
+  pull-request:
+    branches:
+      - main
+
+jobs:
+  hello-world:
+    runs-on: ubuntu-latest # might be better to describe this as running on a vm provided by github
+    steps:
+      - name: hello-world
+        run: echo "Hello World!!!"
