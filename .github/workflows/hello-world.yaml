@@ -7,7 +7,7 @@ on:
   push:
     branches:
       - main
-  pull_request:
+  pull_request: #may be useful to be aware of beginner errors, such as hyphen vs underscore
     branches:
       - main
 
@@ -17,3 +17,5 @@ jobs:
     steps:
       - name: hello-world
         run: echo "Hello World!!!"
+
+#my beginner errors: Trigger names (beware hyphen vs underscore) & directory names (used .github.com instead of .github)
