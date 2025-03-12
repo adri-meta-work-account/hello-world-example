@@ -1,0 +1,21 @@
+#name of the action, in this case it is "hello world"
+name: hello world
+
+#triggers are always under "on"
+# in this case, whenever we push or pull from main branch our workflow will be activated
+on:
+  push:
+    branches:
+      - main
+  pull_request: #may be useful to be aware of beginner errors, such as hyphen vs underscore
+    branches:
+      - main
+
+jobs:
+  hello-world:
+    runs-on: ubuntu-latest # might be better to describe this as running on a vm provided by github
+    steps:
+      - name: hello-world
+        run: echo "Hello World!!!"
+
+#my beginner errors: Trigger names (beware hyphen vs underscore) & directory names (used .github.com instead of .github)
