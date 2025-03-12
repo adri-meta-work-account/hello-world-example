@@ -18,12 +18,12 @@ jobs:
       - name: hello-world
         id: hello-world # this is what is actually being referenced in the second step
         #note how we used "run" to use bash code directly 
-        # what does it mean that "hello_world" is a bad variable?
+        # what does it mean that "hello_world" is a bad variable? -> note line can not have any spaces between variable & value
         # why do we use single currly brackets here and not in the second step?
         # note how on 3rd line, we creating a value with the name "value" to be grabbed in the second step "comment on PR"
         run: |
           echo "Hello World!!!" 
-          hello_world = "Hello World!!!" 
+          hello_world="Hello World!!!" 
           echo "value=${hello_world}" >> $GITHUB_OUTPUT
 
       - name: comment on PR
