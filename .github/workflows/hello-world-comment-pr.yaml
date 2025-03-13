@@ -40,3 +40,8 @@ jobs:
           # use previous step "hello-world" and acquire its value for this step
           body: |
             ${{ steps.hello-world.outputs.value }}
+
+#my beginner errors: setting value of hello_world variable in first step can not have any spaces
+#questions:
+  #why does first step only have a single set of curly brackets around the hello_world var?
+  #why does pull_request in triggers have an underscore, but pull-requests in permissions have a hyphen?
