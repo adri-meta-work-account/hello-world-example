@@ -32,6 +32,8 @@ jobs:
           echo "value=${hello_world}" >> $GITHUB_OUTPUT
 
       - name: comment on PR
+        #use if statement to make sure this only runs on pull resquest & not push 
+        if: ${{ github.event_name == 'pull_request'}}
         uses: peter-evans/create-or-update-comment@v4 #now how we used "uses" to use a github action that has already been created, use repo for ref
         with: #"with" keyword used to provide inputs to action
           issue-number: ${{ github.event.pull_request.number }} # allows us access the number of the pull request that triggers this workflow (as opposed to hardcoding)
