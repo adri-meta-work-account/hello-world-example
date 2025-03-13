@@ -10,6 +10,11 @@ on:
     branches:
       - main
 
+#github actions come with default token that only allows reading, if we wish to give the token more access need to give explicit permission (else 403 error)
+#why does pull-requests here have a hyphen instead of an underscore??
+permissions:
+  pull-requests: write
+
 #we will add a second step that comments on pr
 jobs:
   hello-world:
