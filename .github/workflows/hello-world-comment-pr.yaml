@@ -1,0 +1,42 @@
+name: hello world comment pr
+
+#triggers are always under "on"
+#triggers will remain the same in this example
+on:
+  push:
+    branches:
+      - main
+  pull_request: #may be useful to be aware of beginner errors, such as hyphen vs underscore
+    branches:
+      - main
+
+#github actions come with default token that only allows reading, if we wish to give the token more access need to give explicit permission (else 403 error)
+#why does pull-requests here have a hyphen instead of an underscore??
+permissions:
+  pull-requests: write
+
+#we will add a second step that comments on pr
+jobs:
+  hello-world:
+    runs-on: ubuntu-latest # might be better to describe this as running on a vm provided by github
+    steps:
+      - name: hello-world
+        id: hello-world # this is what is actually being referenced in the second step
+        #note how we used "run" to use bash code directly 
+        # what does it mean that "hello_world" is a bad variable? -> note line can not have any spaces between variable & value
+        # why do we use single currly brackets here and not in the second step?
+        # note how on 3rd line, we creating a value with the name "value" to be grabbed in the second step "comment on PR"
+        run: |
+          echo "Hello World!!!" 
+          hello_world="Hello World!!!" 
+          echo "value=${hello_world}" >> $GITHUB_OUTPUT
+
+      - name: comment on PR
+        #use if statement to make sure this only runs on pull resquest & not push 
+        if: ${{ github.event_name == 'pull_request'}}
+        uses: peter-evans/create-or-update-comment@v4 #now how we used "uses" to use a github action that has already been created, use repo for ref
+        with: #"with" keyword used to provide inputs to action
+          issue-number: ${{ github.event.pull_request.number }} # allows us access the number of the pull request that triggers this workflow (as opposed to hardcoding)
+          # use previous step "hello-world" and acquire its value for this step
+          body: |
+            ${{ steps.hello-world.outputs.value }}
