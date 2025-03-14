@@ -30,7 +30,8 @@ permissions:
 jobs: 
   #first job
   hello-world:
-    runs-on: ubuntu-latest
+    #more on runners: https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
+    runs-on: ubuntu-latest #can also use windows or mac latest for github hosted runners (though we can do self hosted runners as well) 
     steps:
       - name: hello-world #why his there a line in front of name but not ID? can we list multiple names or is it for this step? (diff between thsi and brances on triggers???)
         id: hello-world
@@ -67,4 +68,12 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             ${{ steps.hello-universe.outputs.value }}
-            
+
+  hello-dispatch:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: dispatch-output
+        id: hello-world
+        run: |
+          echo "${{ github.event.inputs.outputValue }}"
