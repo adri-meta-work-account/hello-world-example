@@ -62,7 +62,7 @@ jobs:
         run: |
           hello_universe="Hello Universe!!!"
           echo "${hello_universe}"
-          echo "value=${hello_universe}" >> $GITHUB_OUPUT
+          echo "value=${hello_universe}" >> $GITHUB_OUTPUT
       
       - name: comment on PR
         if: ${{ github.event_name == 'pull_request' }}
