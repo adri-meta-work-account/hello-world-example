@@ -61,7 +61,7 @@ jobs:
         id: hello-universe
         run: |
           hello_universe="Hello Universe!!!"
-          echo ${{ hello_universe }}
+          echo "${hello_universe}""
           echo "value=${hello_universe}" >> $GITHUB_OUPUT
       
       - name: comment on PR
