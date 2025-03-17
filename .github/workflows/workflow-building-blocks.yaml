@@ -2,6 +2,7 @@ name: workflow building blocks
 
 # for more info on triggers -> google "events that trigger worflows"
 # https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows
+#Note: workflow_dispatch, repository_idspatch, & schedule triggers only run in a default branch
 on:
   push:
     branches: # what if you want to blanket do action on push regardless of branch?
