@@ -32,9 +32,12 @@ jobs:
   hello-world:
     #more on runners: https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
     runs-on: ubuntu-latest #can also use windows or mac latest for github hosted runners (though we can do self hosted runners as well) 
+    #steps within a job are non independent & run on a single machine, must run in serial
+    # at a minumum, steps require runs || uses, but having a name variable is good for organizing yourself
     steps:
       - name: hello-world #why his there a line in front of name but not ID? can we list multiple names or is it for this step? (diff between thsi and brances on triggers???)
         id: hello-world
+        # when using run, you can update shell -> by default is current runner shell but you can specify powershell, python shell, etc
         run: | # pipe!!!
           echo "Hello World!!!"
           hello_world="Hello World!!!"
