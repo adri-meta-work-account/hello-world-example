@@ -54,7 +54,7 @@ jobs:
   
 
   hello-universe:
-    #needs: [hello-world] # is this like an if statement? or will it throw an error
+    #needs: [hello-world] # use 'needs' keyword if you wish for jobs to work sequentially (enforce dependencies)
     runs-on: ubuntu-latest
     steps:
       - name: hello-universe
