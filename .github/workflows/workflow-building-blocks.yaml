@@ -1,0 +1,83 @@
+name: workflow building blocks
+
+# for more info on triggers -> google "events that trigger worflows"
+# https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows
+#Note: workflow_dispatch, repository_idspatch, & schedule triggers only run in a default branch
+on:
+  push:
+    branches: # what if you want to blanket do action on push regardless of branch?
+      - main #insert branches you want to insert here
+  pull_request:
+    branches:
+      - main
+    paths: #just like branches can be a filter, so can the path within repo
+      - '.github/**' #pull requests with any changes within `.github` directory & sub-directories will trigger
+  workflow_dispatch: #another type of trigger, allows triggering workflow manually with some inputs we specify below
+    inputs:
+      outputValue:
+        description: 'Value to output'
+        required: false
+        default: 'hello world'
+  repository_dispatch: #trigger -> allows us to run workflow by making API call to github
+    types: [hello_world] #why is this in square brackets??
+  schedule: #eg: "i want my workflow to run at X time a specific day/everyday")
+    - cron: "1 * * * *" #is there a difference in single quotes vs double quotes for github actions?
+
+permissions:
+  pull-requests: write #giving action express persission to also write
+
+#the actual tasks that will be performed
+#NOTE: each job is completely independent from one another -> can be run on different machines
+jobs: 
+  #first job
+  hello-world:
+    #more on runners: https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
+    runs-on: ubuntu-latest #can also use windows or mac latest for github hosted runners (though we can do self hosted runners as well) 
+    #steps within a job are non independent & run on a single machine, must run in serial
+    # at a minumum, steps require runs || uses, but having a name variable is good for organizing yourself
+    steps:
+      - name: hello-world #why his there a line in front of name but not ID? can we list multiple names or is it for this step? (diff between thsi and brances on triggers???)
+        id: hello-world
+        # when using run, you can update shell -> by default is current runner shell but you can specify powershell, python shell, etc
+        run: | # pipe!!!
+          echo "Hello World!!!"
+          hello_world="Hello World!!!"
+          echo "value=${hello_world}" >> $GITHUB_OUTPUT
+
+      # second step
+      - name: comment on PR
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ${{ steps.hello-world.outputs.value }}
+  
+
+  hello-universe:
+    needs: [hello-world] # use 'needs' keyword if you wish for jobs to work sequentially (enforce dependencies)
+    runs-on: ubuntu-latest
+    steps:
+      - name: hello-universe
+        id: hello-universe
+        run: |
+          hello_universe="Hello Universe!!!"
+          echo "${hello_universe}"
+          echo "value=${hello_universe}" >> $GITHUB_OUTPUT
+      
+      - name: comment on PR
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ${{ steps.hello-universe.outputs.value }}
+
+  hello-dispatch:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: dispatch-output
+        id: hello-world
+        run: |
+          echo "${{ github.event.inputs.outputValue }}"
